@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+
+// GET CHILDREN COMPONENTS
+import CoinCard from "./coin-card";
+
+// RETRIEVE COIN API CALL
 import { getCoinsData } from '../actions/coins';
 
 class App extends Component {
@@ -8,26 +13,6 @@ class App extends Component {
         if (!this.props.hasFetchedCoins) this.props.dispatch(getCoinsData());
     }
 
-    renderCoin(coin) {
-
-        // CHECK IF THE PERCENTAGE CHANGE IS UP OR DOWN
-        var changetype = "down";
-        if(coin.quotes.USD.percent_change_24h >= 0) changetype = "up";
-
-        // RETURN THE COIN CARD
-        return (
-            <div className="col-lg-3 col-md-4 col-sm-6 col-xs-12" key={coin.id}>
-                <div className="coin">
-                    <img src={"https://s2.coinmarketcap.com/static/img/coins/64x64/" + coin.id + ".png"} alt={coin.name} />
-                    <div className="details">
-                        <div className="name">{coin.name}</div>
-                        <div className="price">${coin.quotes.USD.price} <span className={"change " + changetype}>{coin.quotes.USD.percent_change_24h}%</span></div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-  
     render() {
         if(!this.props.coins.list.data)
         {
@@ -41,10 +26,13 @@ class App extends Component {
             return (
                 <div>
 
-
                     <div className="container-fluid coins">
                         <div className="row coins-inner">
-                            { coins.map(this.renderCoin) }
+                            {
+                                coins.map(function(coin) {
+                                    return <CoinCard key={coin.id} data={coin} />;
+                                }, this)
+                            }
                         </div>
                     </div>
 
@@ -52,7 +40,7 @@ class App extends Component {
                         <div className="container">
                             <div className="row">
                                 <div className="col-md-12">
-                                    <p>Website branded & powered by <a href="https://haydenbruin.com" target="_blank" rel="noopener noreferrer">Hayden Bruin</a></p>
+                                    <p>Powered by <a href="https://haydenbruin.com" target="_blank" rel="noopener noreferrer">Hayden Bruin</a> - Code on <a href="https://github.com/Haydzyo/Crypto-React-Redux" target="_blank" rel="noopener noreferrer">GitHub</a></p>
                                 </div>
                             </div>
                         </div>
